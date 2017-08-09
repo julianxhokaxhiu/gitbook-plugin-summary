@@ -1,0 +1,32 @@
+{
+  "name": "gitbook-plugin-summary",
+  "version": "0.0.1",
+  "description": "Gitbook plugin to auto-generate SUMMARY.md",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/julianxhokaxhiu/gitbook-plugin-summary.git"
+  },
+  "keywords": [
+    "gitbook",
+    "gitbook-plugin",
+    "gitbook-summary"
+  ],
+  "author": {
+    "name": "Julian Xhokaxhiu",
+    "email": "",
+    "url": "https://julianxhokaxhiu.com/"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/julianxhokaxhiu/gitbook-plugin-summary/issues"
+  },
+  "homepage": "https://github.com/julianxhokaxhiu/gitbook-plugin-summary#readme",
+  "engines": {
+    "gitbook": ">=3.2.3"
+  },
+  "dependencies": {
+    "gitbook-summary": "^1.1.4"
+  }
+}
