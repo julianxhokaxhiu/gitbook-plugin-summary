@@ -7,11 +7,25 @@ This plugin was created out of the frustration of not having a way to auto-gener
 
 ## Installation
 
+First you need to install the package using
+
 ```shell
 $ npm i gitbook-plugin-summary --save
 ```
 
-## Usage
+ afterwards, you need to add to your `book.json` the plugin, like this
+
+```json
+{
+  ...
+  "plugins": [
+    "summary"
+  ],
+  ...
+}
+```
+
+and finally run the command
 
 ```shell
 $ gitbook serve
