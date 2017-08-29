@@ -18,8 +18,7 @@ module.exports = {
       const root = this.resolve(''),
             bookTitle = this.config.get('title'),
             readmeFilename = this.config.get('structure.readme'),
-            summaryFilename = this.config.get('structure.summary'),
-            opts = this.config.get('pluginsConfig.summary')
+            summaryFilename = this.config.get('structure.summary')
 
       glob(
         `*/**/*.md`,
