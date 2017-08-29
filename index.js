@@ -37,6 +37,8 @@ module.exports = {
           })
 
           fs.writeFileSync( `${root}/${summaryFilename}`, summaryContent, { encoding: 'utf8' } )
+
+          console.log(`\x1b[36mgitbook-plugin-summary: \x1b[32m${summaryFilename} generated successfully.`)
         }
       )
     }
