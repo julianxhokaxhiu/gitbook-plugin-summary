@@ -17,6 +17,34 @@ $ npm i gitbook-plugin-summary --save
 $ gitbook serve
 ```
 
+## Example
+
+Let's assume that your source tree is done like this way:
+
+```shell
+$ tree .
+.
+├── 1-Getting Started
+│   ├── 0-README.md
+│   └── 1-TEST.md
+├── 2-Reference
+│   └── 0-README.md
+├── README.md
+└── SUMMARY.md
+```
+
+your **SUMMARY.md** file will look like this:
+
+```markdown
+- [Getting Started](1-Getting Started/0-README.md)
+    - [Test](1-Getting Started/1-TEST.md)
+- [Reference](2-Reference/0-README.md)
+```
+
+and this is how it will be shown inside your Gitbook:
+
+![](example.png)
+
 ## License
 
 See [LICENSE](LICENSE)
