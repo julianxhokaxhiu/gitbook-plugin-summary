@@ -23,7 +23,8 @@ module.exports = {
       glob(
         `*/**/*.md`,
         {
-          cwd: root
+          cwd: root,
+          ignore: ['node_modules/**']
         },
         ( err, files ) => {
           let summaryContent = ( bookTitle ? `# ${bookTitle}\n\n` : '' )
