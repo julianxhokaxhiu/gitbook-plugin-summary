@@ -28,6 +28,6 @@
   },
   "dependencies": {
     "glob": "^7.1.2",
-    "jsonmark": "0.0.1"
+    "markdown-parser": "0.0.8"
   }
 }

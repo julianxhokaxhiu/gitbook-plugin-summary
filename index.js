@@ -1,7 +1,7 @@
 const fs = require('fs'),
       glob = require('glob'),
-      jsonMark = require('jsonmark'),
-      path = require('path')
+      path = require('path'),
+      Parser = require('markdown-parser')
 
 function generateEntry( title, path, readmeFilename ) {
   let depth = path.match(/\//g).length
@@ -15,10 +15,14 @@ function generateEntry( title, path, readmeFilename ) {
 module.exports = {
   hooks: {
     init: function () {
-      const root = this.resolve(''),
+      const parser = new Parser(),
+            root = this.resolve(''),
             bookTitle = this.config.get('title'),
             readmeFilename = this.config.get('structure.readme'),
             summaryFilename = this.config.get('structure.summary')
+
+      let ret = Promise.resolve(),
+          summaryContent = ( bookTitle ? `# ${bookTitle}\n\n` : '' )
 
       glob(
         `*/**/*.md`,
@@ -27,20 +31,42 @@ module.exports = {
           ignore: ['node_modules/**']
         },
         ( err, files ) => {
-          let summaryContent = ( bookTitle ? `# ${bookTitle}\n\n` : '' )
-
           files.forEach( ( filePath ) => {
-            const markdown = jsonMark.parse( fs.readFileSync( `${root}/${filePath}`, { encoding: 'utf8' } ) ),
-                  fileTitle = markdown.order[0]
+            ret = ret.then(
+              () => {
+                return new Promise(
+                  ( resolve, reject ) => {
+                    parser.parse(
+                      fs.readFileSync( `${root}/${filePath}`, { encoding: 'utf8' } ),
+                      ( err, result ) => {
+                        if ( result.headings.length ) {
+                          const fileTitle = result.headings[0].trim()
 
-            summaryContent += generateEntry( fileTitle, filePath, readmeFilename )
+                          summaryContent += generateEntry( fileTitle, filePath, readmeFilename )
+                        }
+
+                        resolve()
+                      }
+                    )
+                  }
+                )
+              }
+            )
           })
 
-          fs.writeFileSync( `${root}/${summaryFilename}`, summaryContent, { encoding: 'utf8' } )
+          ret = ret.then(
+            () => {
+              fs.writeFileSync( `${root}/${summaryFilename}`, summaryContent, { encoding: 'utf8' } )
 
-          console.log(`\x1b[36mgitbook-plugin-summary: \x1b[32m${summaryFilename} generated successfully.`)
+              console.log(`\x1b[36mgitbook-plugin-summary: \x1b[32m${summaryFilename} generated successfully.`)
+
+              return Promise.resolve()
+            }
+          )
         }
       )
+
+      return ret;
     }
   }
 }
