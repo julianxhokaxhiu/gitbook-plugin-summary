@@ -36,10 +36,9 @@ module.exports = {
         },
         ( err, files ) => {
           files.sort((a, b) => {
-            const sameDir = path.dirname(a) == path.dirname(b)
-            if (sameDir && isReadme(a))
+            if (path.dirname(b).includes(path.dirname(a)) && isReadme(a))
               return -1
-            if (sameDir && isReadme(b))
+            if (path.dirname(a).includes(path.dirname(b)) && isReadme(b))
               return 1
             return a < b ? -1 : a > b ? 1 : 0
           })
