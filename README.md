@@ -17,11 +17,9 @@ $ npm i gitbook-plugin-summary --save
 
 ```json
 {
-  ...
   "plugins": [
     "summary"
-  ],
-  ...
+  ]
 }
 ```
 
