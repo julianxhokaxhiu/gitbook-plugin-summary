@@ -1,84 +1,72 @@
-const fs = require('fs'),
-      glob = require('glob'),
-      path = require('path'),
-      Parser = require('markdown-parser')
+const Maybe = require('folktale/maybe')
 
-function generateEntry( title, path, isReadme, isFAQ ) {
-  if (isReadme && isFAQ)
-    return `## ${title}\n`
+const { buildSummary, fileEntry, dirEntry } = require('./renderer')
+const processTree = require('./processor')
+const {
+  getPathTree,
+  readFile,
+  writeSummaryFile,
+  isReadmeExistingInDir
+} = require('./fs')
 
-  const depth = path.match(/\//g).length + (!isReadme && !isFAQ)
-
-  return `${Array(depth).join('    ')}- [${title}](${path})\n`
-}
+const print = str => x => { console.log(str, x); return x }
 
 module.exports = {
   hooks: {
-    init: function () {
-      const parser = new Parser(),
-            root = this.resolve(''),
-            bookTitle = this.config.get('title'),
-            readmeFilename = this.config.get('structure.readme'),
-            summaryFilename = this.config.get('structure.summary'),
-            isFAQ = this.config.get('plugins').includes('theme-faq')
+    init: async function () {
+      try {
+        const root = this.resolve('')
+        const config = getConfig(root, this.config)
 
-      let ret = Promise.resolve(),
-          summaryContent = ( bookTitle ? `# ${bookTitle}\n\n` : '' )
+        await plan(config)
+          .run()
+          .promise()
 
-      const isReadme = path => path.includes(readmeFilename)
-
-      glob(
-        `*/**/*.md`,
-        {
-          cwd: root,
-          ignore: ['node_modules/**'],
-          nosort: true
-        },
-        ( err, files ) => {
-          files.sort((a, b) => {
-            if (path.dirname(b).includes(path.dirname(a)) && isReadme(a))
-              return -1
-            if (path.dirname(a).includes(path.dirname(b)) && isReadme(b))
-              return 1
-            return a < b ? -1 : a > b ? 1 : 0
-          })
-
-          files.forEach( ( filePath ) => {
-            ret = ret.then(
-              () => {
-                return new Promise(
-                  ( resolve, reject ) => {
-                    parser.parse(
-                      fs.readFileSync( `${root}/${filePath}`, { encoding: 'utf8' } ),
-                      ( err, result ) => {
-                        if ( result.headings.length ) {
-                          const fileTitle = result.headings[0].trim()
-
-                          summaryContent += generateEntry( fileTitle, filePath, isReadme(filePath), isFAQ )
-                        }
-
-                        resolve()
-                      }
-                    )
-                  }
-                )
-              }
-            )
-          })
-
-          ret = ret.then(
-            () => {
-              fs.writeFileSync( `${root}/${summaryFilename}`, summaryContent, { encoding: 'utf8' } )
-
-              console.log(`\x1b[36mgitbook-plugin-summary: \x1b[32m${summaryFilename} generated successfully.`)
-
-              return Promise.resolve()
-            }
-          )
-        }
-      )
-
-      return ret;
+        console.info(`\x1b[36mgitbook-plugin-summary: \x1b[32m${config.summaryFilename} generated successfully.`)
+      } catch (e) {
+        console.error('\n\n', e)
+      }
     }
+  }
+}
+
+const plan = config =>
+  getPathTree(config)
+    .map(getTreeInfo(config))
+    .chain(processTree(config))
+    .map(renderEntries(config))
+    .map(buildSummary(config))
+    .map(writeSummaryFile(config))
+
+const getTreeInfo = config => tree =>
+  tree.map(getNeededInfo(config))
+
+const getNeededInfo = config => fileType =>
+  fileType
+    .map(
+      readFile(config),
+      isReadmeExistingInDir(config)
+    )
+
+const renderEntries = config => tree =>
+  tree
+    .map(renderEntry(config))
+
+const renderEntry = config => file =>
+  file.fold(
+    fileEntry(config.isReadme),
+    dirEntry(config.readmeFilename)
+  )
+
+const getConfig = (root, config) => {
+  const readmeFilename = config.get('structure.readme')
+  const bookTitle = config.get('title')
+
+  return {
+    root,
+    bookTitle: Maybe.fromNullable(bookTitle),
+    isReadme: path => path.includes(readmeFilename),
+    readmeFilename,
+    summaryFilename: config.get('structure.summary')
   }
 }
