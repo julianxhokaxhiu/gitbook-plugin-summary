@@ -31,6 +31,30 @@ and finally run the command
 $ gitbook serve
 ```
 
+## Rules
+
+### Names
+
+* **README.md**: Taken from their directory name
+* **File**: Taken from the first first-header (ex: `# title`) of the file
+* **Directory**: Name of the directory
+
+### Entry Types
+
+#### Directory at the root of the gitbook
+
+* With a README first level in it, it will be shown as a normal link
+* If it doesn't, it will be shown as a section
+
+#### Nested Directories
+
+* With a README first level in it, it will be shown as a normal link
+* If it doesn't, it will be shown as a label (or disabled link, if you will)
+
+#### Files
+
+* Only markdown files are shown
+
 ## Example
 
 Let's assume that your source tree is done like this way:
