@@ -55,8 +55,11 @@ const writeSummaryFile = config => summaryContent => {
 }
 
 // Config -> [ String, _ ] -> Bool
-const isReadmeExistingInDir = config => ([ dirPath ]) =>
-  fs.existsSync(dirPath + config.readmeFilename)
+const isReadmeExistingInDir = config => ([ dirPath ]) => {
+  const readmePath = path.join(config.root, dirPath, config.readmeFilename)
+  const res = fs.existsSync(readmePath)
+  return res
+}
 
 module.exports = {
   getPathTree,

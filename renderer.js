@@ -4,7 +4,7 @@ const dirEntry = readmeFilename => ([ dirPath, hasReadme ]) => {
   const depth = getDirDepth(dirPath)
   const title = getDirTitle(dirPath)
 
-  if (hasReadme && depth === 0) {
+  if (!hasReadme && depth === 0) {
     return sectionEntries(title)
   } else if (hasReadme) {
     return linkEntries(depth, title, dirPath + readmeFilename)
