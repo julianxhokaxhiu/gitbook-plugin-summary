@@ -89,6 +89,9 @@ and this is how it will be shown inside your Gitbook:
 * If it seems like it's not rerendering, save again. Changes are taken into account on the second
   server restart.
 
+* `unexpected token function`: This is caused by the only async-await in the code. 2 ways of fixing
+  it. First, install Node 7.6+. Second, pull request it. It's only a 2-3 lines change :)
+
 ## License
 
 See [LICENSE](LICENSE)

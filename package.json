@@ -32,7 +32,6 @@
     "glob": "^7.1.2",
     "immutable": "^3.8.2",
     "immutable-ext": "^1.1.2",
-    "list-in-js": "git+https://github.com/PandaNoir/List-in-JS.git",
     "markdown-parser": "0.0.8"
   }
 }
