@@ -1,5 +1,7 @@
 const Maybe = require('folktale/maybe')
 
+const print = str => x => { console.log(str, x); return x }
+
 const dirEntry = readmeFilename => ([ dirPath, hasReadme ]) => {
   const depth = getDirDepth(dirPath)
   const title = getDirTitle(dirPath)
@@ -22,8 +24,8 @@ const getDirTitle = path =>
 const fileEntry = isReadme => ([ filePath, parsedMarkdown ]) => {
   if (isReadme(filePath)) return
 
-  const fileTitle = getFileTitle(parsedMarkdown)
   const depth = getFileDepth(filePath)
+  const fileTitle = getFileTitle(parsedMarkdown)
 
   return linkEntries(depth, fileTitle, filePath)
 }
@@ -41,7 +43,7 @@ const depthEntries = (depth, entries) =>
 const sectionEntries = (title, path) => `\n## ${title}\n`
 
 const disabledEntries = (depth, title) =>
-  depthEntries(depth, `- ${title}`)
+  depthEntries(depth, `- [${title}]()`)
 
 const linkEntries = (depth, title, path) =>
   depthEntries(depth, `- [${title}](${path})`)
@@ -50,14 +52,8 @@ const getFileDepth = path => path.match(/\//g).length
 
 const getDirDepth = path => getFileDepth(path) - 1
 
-const buildSummary = config => entries => {
-  const title =
-    config.bookTitle
-      .map(t => `# ${t}\n\n`)
-      .getOrElse('')
-
-  return title + entries.join('\n')
-}
+const buildSummary = config => entries =>
+  entries.join('\n')
 
 module.exports = {
   fileEntry,
