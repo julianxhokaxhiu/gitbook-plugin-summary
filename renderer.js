@@ -30,8 +30,8 @@ const fileEntry = isReadme => ([ filePath, parsedMarkdown ]) => {
   if (isReadme(filePath)) return
 
   const depth = getFileDepth(filePath)
-  console.log(filePath, parsedMarkdown);
-  const fileTitle = getFileTitle(parsedMarkdown) || getFileName(filePath)
+  const fileTitle = getFileTitle(parsedMarkdown)
+    .getOrElse(getFileName(filePath))
 
   return linkEntries(depth, fileTitle, filePath)
 }
@@ -42,7 +42,6 @@ const getFileTitle = parsedMarkdown =>
     .map(headings => headings[0])
     .filter(title => !!title)
     .map(title => title.trim())
-    .getOrElse(null)
 
 const depthEntries = (depth, entries) =>
   Array(depth).join('    ') + entries
