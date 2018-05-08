@@ -41,7 +41,7 @@ const getPaths = (config, pattern) =>
     pattern,
     {
       cwd: config.root,
-      ignore: [ 'node_modules/**', '_book', 'styles' ],
+      ignore: [ 'node_modules/**', '_book', 'styles', '_layouts' ],
       nosort: true
     }
   )
