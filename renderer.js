@@ -34,9 +34,9 @@ const getFileName = path =>
 const fileEntry = isReadme => ([ filePath, parsedMarkdown ]) => {
   if (isReadme(filePath)) return
 
-  const depth = getFileDepth(filePath)
+  const depth = getFileDepth(filePath) + 1
   const fileTitle = formatTitle(getFileName(filePath))
-
+  if (filePath.toLowerCase().indexOf('readme.md') !== -1) return
   return linkEntries(depth, fileTitle, filePath)
 }
 
