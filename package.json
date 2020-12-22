@@ -28,10 +28,10 @@
   },
   "dependencies": {
     "fantasy-identities": "0.0.1",
-    "folktale": "^2.0.1",
-    "glob": "^7.1.2",
+    "folktale": "^2.3.2",
+    "glob": "^7.1.6",
     "immutable": "^3.8.2",
-    "immutable-ext": "^1.1.2",
+    "immutable-ext": "^1.1.5",
     "markdown-parser": "0.0.8"
   }
 }
