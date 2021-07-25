@@ -51,6 +51,7 @@ const readFile = config => ([ path ]) =>
   fs.readFileSync(`${config.root}/${path}`, { encoding: 'utf8' })
 
 const writeSummaryFile = config => summaryContent => {
+  summaryContent = '\n- [Introduction](README.md)\n' + summaryContent
   fs.writeFileSync(`${config.root}/${config.summaryFilename}`, summaryContent, { encoding: 'utf8' })
 }
 
