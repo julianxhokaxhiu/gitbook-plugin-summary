@@ -83,7 +83,7 @@ and this is how it will be shown inside your Gitbook:
 
 ## Troubleshooting
 
-* Code span (with the back ticks) won't be recognize. So better avoid until someone find it
+* Code span (with the back ticks) won't be recognize. So better avoid until someone finds it
   important enough to fix that :P
 
 * If it seems like it's not rerendering, save again. Changes are taken into account on the second
